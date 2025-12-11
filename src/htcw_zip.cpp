@@ -615,7 +615,8 @@ namespace zip {
             if(sizeof(signature)!=s) {
                return zip_result::io_error;
             }
-            if (signature == bits::from_le(0x06054B50U))
+            if (signature == bits::from_le(static_cast<uint32_t>(0x06054B50)))
+
                 break;
         }
         // read end of central directory record
@@ -624,7 +625,7 @@ namespace zip {
         if(!rdr.read(&signature)) {
            return zip_result::io_error;
         }
-        if (signature != 0x06054B50U) {
+        if (signature != bits::from_le(static_cast<uint32_t>(0x06054B50))) {
             return zip_result::not_supported;
         }
         uint16_t disk_number;
@@ -664,7 +665,7 @@ namespace zip {
                 uint32_t num_disks;
                 rdr.read(&num_disks);
 
-                if (!((signature == 0x06064B50U) &&
+                if (!((signature == bits::from_le(static_cast<uint32_t>(0x06054B50))) &&
                     eocdr_disk == 0 &&
                     num_disks == 1))
                 {
@@ -692,7 +693,7 @@ namespace zip {
                 rdr.read(&cdr_size64);
                 rdr.read(&u64);
                 m_offset = (long long int)u64;
-                if (!((signature == 0x06064B50U) &&
+                if (!((signature == bits::from_le(static_cast<uint32_t>(0x06054B50))) &&
                     disk_number64 == 0 &&
                     cdr_disk_number64 == 0 &&
                     disk_num_entries64 == m_entries_size))
